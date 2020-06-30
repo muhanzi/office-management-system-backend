@@ -20,3 +20,5 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`listening on port ${port} ...`);
 });
+
+exports.appServer = app; // we use this for writing tests

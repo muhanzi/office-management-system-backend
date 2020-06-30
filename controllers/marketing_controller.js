@@ -1,7 +1,7 @@
 const marketingService = require("../services/marketing_service");
 
 exports.showAll = (req, res, next) => {
-  res.send("showAll is working okok");
+  res.send({ message: "showAll is working okok" });
 };
 
 exports.showOne = (req, res, next) => {
@@ -11,4 +11,8 @@ exports.showOne = (req, res, next) => {
   } else {
     next(new Error("id given is invalid"));
   }
+};
+
+exports.isUserActive = () => {
+  return true;
 };
