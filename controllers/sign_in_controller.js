@@ -1,6 +1,8 @@
 const signInService = require("../services/sign_in_service");
 const joi = require("joi");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const secretKey = require("../privateKey.json");
 
 exports.signIn = (req, res, next) => {
   if (req.body != null) {
@@ -29,7 +31,57 @@ exports.signIn = (req, res, next) => {
           .compare(results.value.password, response.password)
           .then((areEqual) => {
             if (areEqual) {
-              res.status(200).send(response);
+              // generate jwt token  // syncrhonous way
+              // const token = jwt.sign(
+              //   {
+              //     username: response.username,
+              //     department: response.department,
+              //     role: response.role,
+              //     iat: new Date().getTime(), // but it still given by default even if we do not specify it //iat -->issued at // we add the timeStamp prperty to the JWT payload --> so that the token will always be different every time user logs in
+              //   },
+              //   secretKey.privateKey.JWT_SECRET_KEY,
+              //   { expiresIn: "1h" }
+              // );
+              // res.status(200).send({
+              //   message: "signed in successfully",
+              //   data: {
+              //     id: response._id,
+              //     username: response.username,
+              //     department: response.department,
+              //     role: response.role,
+              //   },
+              //   token: token,
+              // });
+              //generate jwt token  // asyncrhonous way
+              jwt.sign(
+                {
+                  username: response.username,
+                  department: response.department,
+                  role: response.role,
+                  iat: new Date().getTime(), //iat -->issued at // we add the timeStamp prperty to the JWT payload --> so that the token will always be different every time user logs in // but it still given by default even if we do not specify it
+                },
+                secretKey.privateKey.JWT_SECRET_KEY,
+                { expiresIn: "1h" },
+                function (error, token) {
+                  if (token) {
+                    res.status(200).send({
+                      message: "signed in successfully",
+                      data: {
+                        id: response._id,
+                        username: response.username,
+                        department: response.department,
+                        role: response.role,
+                      },
+                      token: token,
+                    });
+                    return;
+                  }
+                  res
+                    .status(500)
+                    .send({ message: "authentiation failed", error: error });
+                }
+              );
+              //
               next();
             } else {
               next(new Error("password is incorrect"));
