@@ -48,7 +48,7 @@ exports.signUp = (req, res, next) => {
                     username: response.username,
                     department: response.department,
                     role: response.role,
-                    iat: new Date().getTime(), // but it is still given by default even if we do not specify it //iat -->issued at // we add the timeStamp prperty to the JWT payload --> so that the token will always be different every time user logs in
+                    iat: new Date().getTime(), // but it is still given by default even if we do not specify it //iat -->issued at // we add the timeStamp property to the JWT payload --> so that the token will always be different every time user logs in
                   },
                   secretKey.privateKey.JWT_SECRET_KEY,
                   { expiresIn: "1h" }
