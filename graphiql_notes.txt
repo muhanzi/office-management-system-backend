@@ -1,0 +1,31 @@
+query{
+  
+  user(username: "lydie"){
+    username,
+    password,
+    department
+  },
+  users{
+    id,username,
+  },
+}
+
+# mutation{
+#   addUser(username:"lydie",password:"soulmate",role:"director",department:"marketing"){
+#     id,
+#     username,
+#     role
+#   },
+  
+#   updateUser(id:"60ede5f43db9134360fd479b",username:"lydie",password:"soulmate",role:"director"){
+#     id,
+#     username,
+#     password
+#   },
+  
+#   deleteUser(id:"60ede5f43db9134360fd479b"){
+#     id,
+#     username,
+#     password
+#   }
+# }
